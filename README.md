@@ -113,6 +113,7 @@ action:
 
 ```
 
+![Atom S3R preview](img/temp-example.png)
 
 ### 2) Turn on a light when Display 1 is double-clicked
 
@@ -132,3 +133,7 @@ action:
   - service: light.turn_on
     target:
       entity_id: light.living_room_lamp
+```
+
+
+![Atom S3R preview](img/shade-example.png)
