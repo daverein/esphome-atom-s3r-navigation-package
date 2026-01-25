@@ -39,8 +39,12 @@ Create a new ESPHome device YAML like:
 
 ```yaml
 substitutions:
-  device_name: "den-atom-s3r"
-  device_friendly_name: "Den Atom S3R"
+  device_name: "your-device-name"
+  device_friendly_name: "Your Friendly NAme"
+
+api:
+  encryption:
+    key: "YOUR_API_KEY"
 
 packages:
   atom_s3r: github://daverein/esphome-atom-s3r-navigation-package/packages/atom_s3r/main.yaml@main
