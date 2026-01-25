@@ -13,6 +13,7 @@ A reusable ESPHome package for the **M5Stack Atom S3R** that provides:
 - Per-display button events (press / double-click / hold)
 - Optional “idle return to Display 1”
 - Fully customizable per-screen icon + text lines via Home Assistant UI
+- Network status via colored background
 
 ---
 
