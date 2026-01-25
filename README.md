@@ -66,6 +66,9 @@ Once the device is adopted in Home Assistant, you’ll get entities like:
 Displays 2–4 are only included in cycling if enabled.
 Tap-to-cycle is separated from normal press events, so it won’t accidentally trigger your automations.
 
+
+![Atom S3R preview](img/shades-example.png)
+
 ### Per-display UI fields
 - `D1 Icon`, `D1 Icon Title`, `D1 Line 1`, `D1 Line 2`, `D1 Line 3`
 - `D2 Icon`, `D2 Icon Title`, `D2 Line 1`, `D2 Line 2`, `D2 Line 3`
@@ -113,6 +116,7 @@ action:
 
 ```
 
+![Atom S3R preview](img/temp-example.png)
 
 ### 2) Turn on a light when Display 1 is double-clicked
 
@@ -132,3 +136,6 @@ action:
   - service: light.turn_on
     target:
       entity_id: light.living_room_lamp
+```
+
+
