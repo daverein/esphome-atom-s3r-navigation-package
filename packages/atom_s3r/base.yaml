@@ -1,9 +1,8 @@
 # packages/atom_s3r/base.yaml
 
 esphome:
-  esphome:
-    name: ${device_name}
-    friendly_name: ${device_friendly_name}
+  name: ${device_name}
+  friendly_name: ${device_friendly_name}
   on_boot:
     priority: -10
     then:
