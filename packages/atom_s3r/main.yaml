@@ -1,0 +1,8 @@
+packages:
+  atom_base: !include base.yaml
+  atom_connectivity: !include connectivity.yaml
+  atom_ble_ir: !include ble_ir.yaml
+  atom_backlight: !include backlight_lp5562.yaml
+  atom_display_icons: !include display_icons.yaml
+  atom_ui: !include ui_displays.yaml
+  atom_buttons: !include button_events.yaml
