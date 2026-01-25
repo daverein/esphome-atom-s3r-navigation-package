@@ -1,0 +1,10 @@
+substitutions:
+  device_name: "atom-s3r-ble-ir-btn-proxy"
+  device_friendly_name: "Atom S3R BLE + IR Proxy + Button"
+
+dashboard_import:
+  package_import_url: github://daverein/esphome-atom-s3r-navigation-package/packages/atom_s3r/installer.yaml@main
+  import_full_config: true
+
+packages:
+  atom_s3r: github://daverein/esphome-atom-s3r-navigation-package/packages/atom_s3r/main.yaml@main
