@@ -1,0 +1,74 @@
+# packages/atom_s3r/base.yaml
+
+esphome:
+  name: atom-s3r-ble-ir-btn-proxy
+  friendly_name: "Atom S3R BLE + IR Proxy + Button"
+  on_boot:
+    priority: -10
+    then:
+      - lambda: |-
+          id(wifi_last_transition_ms) = millis();
+          id(last_user_activity_ms) = millis();
+
+          // Apply saved rotation at boot
+          switch (id(lcd_rotation)) {
+            case 0:
+              id(display_1).set_rotation(esphome::display::DISPLAY_ROTATION_0_DEGREES);
+              break;
+            case 90:
+              id(display_1).set_rotation(esphome::display::DISPLAY_ROTATION_90_DEGREES);
+              break;
+            case 180:
+              id(display_1).set_rotation(esphome::display::DISPLAY_ROTATION_180_DEGREES);
+              break;
+            case 270:
+              id(display_1).set_rotation(esphome::display::DISPLAY_ROTATION_270_DEGREES);
+              break;
+            default:
+              id(display_1).set_rotation(esphome::display::DISPLAY_ROTATION_180_DEGREES);
+              id(lcd_rotation) = 180;
+              break;
+          }
+      - component.update: display_1
+
+substitutions:
+  icon_x_position: "24"
+  icon_y_position: "24"
+
+globals:
+  - id: wifi_last_transition_ms
+    type: uint32_t
+    restore_value: no
+    initial_value: '0'
+
+  - id: last_user_activity_ms
+    type: uint32_t
+    restore_value: no
+    initial_value: '0'
+
+  # Active screen (1..4)
+  - id: active_screen
+    type: int
+    restore_value: yes
+    initial_value: '1'
+
+  # Saved display rotation (0/90/180/270)
+  - id: lcd_rotation
+    type: int
+    restore_value: yes
+    initial_value: '180'
+
+esp32:
+  board: esp32-s3-devkitc-1
+  framework:
+    type: esp-idf
+
+logger:
+
+api:
+  encryption:
+    key: "8+9zRJ1YBR/2j7hwOFg1e6P/fqYK9UHhPcg6qS9jzR4="
+
+ota:
+  - platform: esphome
+    password: "de407c93f201933ef95a175a039316be"

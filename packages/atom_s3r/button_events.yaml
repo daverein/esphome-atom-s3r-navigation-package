@@ -1,0 +1,216 @@
+# packages/atom_s3r/button_events.yaml
+
+# -----------------------
+# Auto timeout back to Display 1 after 10s of idle
+# Only return when idle (no recent user activity)
+# -----------------------
+interval:
+  - interval: 250ms
+    then:
+      - lambda: |-
+          // Only return to Display 1 when:
+          // - idle return is enabled (UI switch)
+          // - user is NOT already on screen 1
+          // - truly idle (no recent button actions)
+          const uint32_t idle_ms = millis() - id(last_user_activity_ms);
+
+          if (id(enable_idle_return).state && id(active_screen) != 1 && idle_ms >= 10000) {
+            id(active_screen) = 1;
+            id(display_1).update();
+          }
+
+
+# -----------------------
+# Scripts: screen cycling + display-specific pulses
+# -----------------------
+script:
+  - id: cycle_screen
+    mode: restart
+    then:
+      - lambda: |-
+          id(last_user_activity_ms) = millis();
+
+          auto enabled = [&](int s) -> bool {
+            if (s == 1) return true;
+            if (s == 2) return id(enable_display2).state;
+            if (s == 3) return id(enable_display3).state;
+            if (s == 4) return id(enable_display4).state;
+            return false;
+          };
+
+          int next = id(active_screen) + 1;
+          if (next > 4) next = 1;
+
+          for (int i = 0; i < 4; i++) {
+            if (enabled(next)) {
+              id(active_screen) = next;
+              break;
+            }
+            next++;
+            if (next > 4) next = 1;
+          }
+      - component.update: display_1
+
+  - id: pulse_press
+    mode: restart
+    then:
+      - lambda: |-
+          id(last_user_activity_ms) = millis();
+          switch (id(active_screen)) {
+            case 1: id(d1_pressed).publish_state(true); break;
+            case 2: id(d2_pressed).publish_state(true); break;
+            case 3: id(d3_pressed).publish_state(true); break;
+            case 4: id(d4_pressed).publish_state(true); break;
+            default: id(d1_pressed).publish_state(true); break;
+          }
+      - delay: 120ms
+      - lambda: |-
+          switch (id(active_screen)) {
+            case 1: id(d1_pressed).publish_state(false); break;
+            case 2: id(d2_pressed).publish_state(false); break;
+            case 3: id(d3_pressed).publish_state(false); break;
+            case 4: id(d4_pressed).publish_state(false); break;
+            default: id(d1_pressed).publish_state(false); break;
+          }
+
+  - id: pulse_double_click
+    mode: restart
+    then:
+      - lambda: |-
+          id(last_user_activity_ms) = millis();
+          switch (id(active_screen)) {
+            case 1: id(d1_double_clicked).publish_state(true); break;
+            case 2: id(d2_double_clicked).publish_state(true); break;
+            case 3: id(d3_double_clicked).publish_state(true); break;
+            case 4: id(d4_double_clicked).publish_state(true); break;
+            default: id(d1_double_clicked).publish_state(true); break;
+          }
+      - delay: 120ms
+      - lambda: |-
+          switch (id(active_screen)) {
+            case 1: id(d1_double_clicked).publish_state(false); break;
+            case 2: id(d2_double_clicked).publish_state(false); break;
+            case 3: id(d3_double_clicked).publish_state(false); break;
+            case 4: id(d4_double_clicked).publish_state(false); break;
+            default: id(d1_double_clicked).publish_state(false); break;
+          }
+
+  - id: pulse_hold
+    mode: restart
+    then:
+      - lambda: |-
+          id(last_user_activity_ms) = millis();
+          switch (id(active_screen)) {
+            case 1: id(d1_held).publish_state(true); break;
+            case 2: id(d2_held).publish_state(true); break;
+            case 3: id(d3_held).publish_state(true); break;
+            case 4: id(d4_held).publish_state(true); break;
+            default: id(d1_held).publish_state(true); break;
+          }
+      - delay: 120ms
+      - lambda: |-
+          switch (id(active_screen)) {
+            case 1: id(d1_held).publish_state(false); break;
+            case 2: id(d2_held).publish_state(false); break;
+            case 3: id(d3_held).publish_state(false); break;
+            case 4: id(d4_held).publish_state(false); break;
+            default: id(d1_held).publish_state(false); break;
+          }
+
+
+# -----------------------
+# Display-specific event entities (for HA automations)
+# -----------------------
+binary_sensor:
+  - platform: template
+    id: d1_pressed
+    name: "Display 1 Button Pressed"
+  - platform: template
+    id: d1_double_clicked
+    name: "Display 1 Button Double Clicked"
+  - platform: template
+    id: d1_held
+    name: "Display 1 Button Held"
+
+  - platform: template
+    id: d2_pressed
+    name: "Display 2 Button Pressed"
+  - platform: template
+    id: d2_double_clicked
+    name: "Display 2 Button Double Clicked"
+  - platform: template
+    id: d2_held
+    name: "Display 2 Button Held"
+
+  - platform: template
+    id: d3_pressed
+    name: "Display 3 Button Pressed"
+  - platform: template
+    id: d3_double_clicked
+    name: "Display 3 Button Double Clicked"
+  - platform: template
+    id: d3_held
+    name: "Display 3 Button Held"
+
+  - platform: template
+    id: d4_pressed
+    name: "Display 4 Button Pressed"
+  - platform: template
+    id: d4_double_clicked
+    name: "Display 4 Button Double Clicked"
+  - platform: template
+    id: d4_held
+    name: "Display 4 Button Held"
+
+  # Physical button (internal)
+  - platform: gpio
+    id: atoms3r_button_raw
+    internal: true
+    pin:
+      number: GPIO41
+      inverted: true
+      mode:
+        input: true
+        pullup: true
+    filters:
+      - delayed_off: 10ms
+
+    on_multi_click:
+      # DOUBLE CLICK (action)
+      - timing:
+          - ON for at most 400ms
+          - OFF for at most 350ms
+          - ON for at most 400ms
+          - OFF for at least 120ms
+        then:
+          - script.execute: pulse_double_click
+
+      # VERY SHORT TAP (screen cycle ONLY)
+      # Does NOT generate "pressed" event.
+      - timing:
+          - ON for at most 180ms
+          - OFF for at least 120ms
+        then:
+          - script.execute: cycle_screen
+
+      # NORMAL PRESS (action)
+      # This will catch presses longer than short-tap, but shorter than hold.
+      - timing:
+          - ON for at most 800ms
+          - OFF for at least 120ms
+        then:
+          - script.execute: pulse_press
+
+      # HOLD (action) > 1s
+      - timing:
+          - ON for at least 1s
+          - OFF for at least 120ms
+        then:
+          - script.execute: pulse_hold
+
+      # LONG HOLD (internal only) >= 3s → cycle screen
+      - timing:
+          - ON for at least 3s
+          - OFF for at least 120ms
+        then:
+          - script.execute: cycle_screen

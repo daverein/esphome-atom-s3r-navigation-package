@@ -1,0 +1,107 @@
+# packages/atom_s3r/display.yaml
+
+# -----------------------------
+# LCD (SPI)
+# -----------------------------
+spi:
+  clk_pin: GPIO15
+  mosi_pin: GPIO21
+
+display:
+  - platform: st7789v
+    model: CUSTOM
+    width: 128
+    height: 128
+    cs_pin: GPIO14
+    dc_pin: GPIO42
+    reset_pin: GPIO48
+    rotation: 180
+    data_rate: 20MHz
+    update_interval: 250ms
+    id: display_1
+    offset_height: 3
+    offset_width: 1
+
+    lambda: |-
+      // WiFi background status
+      const bool has_ip = !id(wifi_ip).state.empty();
+      const uint32_t age = millis() - id(wifi_last_transition_ms);
+
+      Color bg;
+      if (has_ip) {
+        bg = Color(1, 50, 32);
+      } else if (age < 15000) {
+        bg = Color(218, 165, 32);
+      } else {
+        bg = Color(139, 0, 0);
+      }
+
+      it.fill(bg);
+
+      // Current display variables
+      std::string icon_name;
+      std::string title;
+      std::string l1;
+      std::string l2;
+      std::string l3;
+
+      auto pick_option = [&](auto *sel) -> std::string {
+        // ESPHome returns a StringRef (not std::optional)
+        auto ref = sel->current_option();
+        if (ref.size() == 0) return "(none)";
+        return std::string(ref.c_str());
+      };
+
+      switch (id(active_screen)) {
+        case 1:
+          icon_name = pick_option(id(d1_icon));
+          title = id(d1_icon_title).state;
+          l1 = id(d1_line1).state;
+          l2 = id(d1_line2).state;
+          l3 = id(d1_line3).state;
+          break;
+        case 2:
+          icon_name = pick_option(id(d2_icon));
+          title = id(d2_icon_title).state;
+          l1 = id(d2_line1).state;
+          l2 = id(d2_line2).state;
+          l3 = id(d2_line3).state;
+          break;
+        case 3:
+          icon_name = pick_option(id(d3_icon));
+          title = id(d3_icon_title).state;
+          l1 = id(d3_line1).state;
+          l2 = id(d3_line2).state;
+          l3 = id(d3_line3).state;
+          break;
+        case 4:
+          icon_name = pick_option(id(d4_icon));
+          title = id(d4_icon_title).state;
+          l1 = id(d4_line1).state;
+          l2 = id(d4_line2).state;
+          l3 = id(d4_line3).state;
+          break;
+        default:
+          icon_name = pick_option(id(d1_icon));
+          title = id(d1_icon_title).state;
+          l1 = id(d1_line1).state;
+          l2 = id(d1_line2).state;
+          l3 = id(d1_line3).state;
+          break;
+      }
+
+      // Icon
+      if (!icon_name.empty() && icon_name != "(none)") {
+        const std::string icon_char = id(icon_map)[icon_name];
+        if (!icon_char.empty()) {
+          it.printf(${icon_x_position}, ${icon_y_position},
+                    id(icon_font), Color(255, 255, 255),
+                    TextAlign::CENTER, "%s", icon_char.c_str());
+        }
+      }
+
+      // Text layout
+      it.printf(80, 10, id(f_big), TextAlign::TOP_CENTER, "%s", title.c_str());
+      it.printf(64, 44, id(f_small), TextAlign::TOP_CENTER, "%s", l1.c_str());
+      it.printf(64, 72, id(f_small), TextAlign::TOP_CENTER, "%s", l2.c_str());
+      it.printf(64, 118, id(f_small), TextAlign::BOTTOM_CENTER, "%s", l3.c_str());

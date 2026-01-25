@@ -1,0 +1,21 @@
+# packages/atom_s3r/ble_ir.yaml
+
+# -----------------------
+# BLE Proxy
+# -----------------------
+esp32_ble_tracker:
+  scan_parameters:
+    interval: 320ms
+    window: 160ms
+    active: true
+
+bluetooth_proxy:
+  active: true
+
+# -----------------------
+# IR transmitter (Atom S3R IR LED)
+# -----------------------
+remote_transmitter:
+  pin: GPIO4
+  carrier_duty_percent: 50%
+  non_blocking: true

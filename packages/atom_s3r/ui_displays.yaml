@@ -1,0 +1,452 @@
+# packages/atom_s3r/ui_displays.yaml
+
+# -----------------------
+# Enable optional displays (2/3/4)
+# -----------------------
+switch:
+  - platform: template
+    id: enable_display2
+    name: "Enable Display 2"
+    optimistic: true
+    restore_mode: RESTORE_DEFAULT_OFF
+    on_turn_on:
+      then:
+        - component.update: display_1
+    on_turn_off:
+      then:
+        - lambda: |-
+            if (id(active_screen) == 2) id(active_screen) = 1;
+        - component.update: display_1
+
+  - platform: template
+    id: enable_display3
+    name: "Enable Display 3"
+    optimistic: true
+    restore_mode: RESTORE_DEFAULT_OFF
+    on_turn_on:
+      then:
+        - component.update: display_1
+    on_turn_off:
+      then:
+        - lambda: |-
+            if (id(active_screen) == 3) id(active_screen) = 1;
+        - component.update: display_1
+
+  - platform: template
+    id: enable_display4
+    name: "Enable Display 4"
+    optimistic: true
+    restore_mode: RESTORE_DEFAULT_OFF
+    on_turn_on:
+      then:
+        - component.update: display_1
+    on_turn_off:
+      then:
+        - lambda: |-
+            if (id(active_screen) == 4) id(active_screen) = 1;
+        - component.update: display_1
+
+  - platform: template
+    id: enable_idle_return
+    name: "Idle Return To Display 1"
+    optimistic: true
+    restore_mode: RESTORE_DEFAULT_ON
+    on_turn_on:
+      then:
+        - component.update: display_1
+    on_turn_off:
+      then:
+        - component.update: display_1
+
+
+# -----------------------
+# HA-configurable text fields per display
+# -----------------------
+text:
+  # Display 1 (required)
+  - platform: template
+    mode: text
+    id: d1_icon_title
+    name: "D1 Icon Title"
+    max_length: 24
+    restore_value: true
+    initial_value: "Home"
+    optimistic: true
+    on_value:
+      then:
+        - component.update: display_1
+
+  - platform: template
+    mode: text
+    id: d1_line1
+    name: "D1 Line 1"
+    max_length: 24
+    restore_value: true
+    initial_value: "Top"
+    optimistic: true
+    on_value:
+      then:
+        - component.update: display_1
+
+  - platform: template
+    mode: text
+    id: d1_line2
+    name: "D1 Line 2"
+    max_length: 24
+    restore_value: true
+    initial_value: "Middle"
+    optimistic: true
+    on_value:
+      then:
+        - component.update: display_1
+
+  - platform: template
+    mode: text
+    id: d1_line3
+    name: "D1 Line 3"
+    max_length: 24
+    restore_value: true
+    initial_value: "Bottom"
+    optimistic: true
+    on_value:
+      then:
+        - component.update: display_1
+
+  # Display 2
+  - platform: template
+    mode: text
+    id: d2_icon_title
+    name: "D2 Icon Title"
+    max_length: 24
+    restore_value: true
+    initial_value: "Display 2"
+    optimistic: true
+    on_value:
+      then:
+        - component.update: display_1
+
+  - platform: template
+    mode: text
+    id: d2_line1
+    name: "D2 Line 1"
+    max_length: 24
+    restore_value: true
+    initial_value: ""
+    optimistic: true
+    on_value:
+      then:
+        - component.update: display_1
+
+  - platform: template
+    mode: text
+    id: d2_line2
+    name: "D2 Line 2"
+    max_length: 24
+    restore_value: true
+    initial_value: ""
+    optimistic: true
+    on_value:
+      then:
+        - component.update: display_1
+
+  - platform: template
+    mode: text
+    id: d2_line3
+    name: "D2 Line 3"
+    max_length: 24
+    restore_value: true
+    initial_value: ""
+    optimistic: true
+    on_value:
+      then:
+        - component.update: display_1
+
+  # Display 3
+  - platform: template
+    mode: text
+    id: d3_icon_title
+    name: "D3 Icon Title"
+    max_length: 24
+    restore_value: true
+    initial_value: "Display 3"
+    optimistic: true
+    on_value:
+      then:
+        - component.update: display_1
+
+  - platform: template
+    mode: text
+    id: d3_line1
+    name: "D3 Line 1"
+    max_length: 24
+    restore_value: true
+    initial_value: ""
+    optimistic: true
+    on_value:
+      then:
+        - component.update: display_1
+
+  - platform: template
+    mode: text
+    id: d3_line2
+    name: "D3 Line 2"
+    max_length: 24
+    restore_value: true
+    initial_value: ""
+    optimistic: true
+    on_value:
+      then:
+        - component.update: display_1
+
+  - platform: template
+    mode: text
+    id: d3_line3
+    name: "D3 Line 3"
+    max_length: 24
+    restore_value: true
+    initial_value: ""
+    optimistic: true
+    on_value:
+      then:
+        - component.update: display_1
+
+  # Display 4
+  - platform: template
+    mode: text
+    id: d4_icon_title
+    name: "D4 Icon Title"
+    max_length: 24
+    restore_value: true
+    initial_value: "Display 4"
+    optimistic: true
+    on_value:
+      then:
+        - component.update: display_1
+
+  - platform: template
+    mode: text
+    id: d4_line1
+    name: "D4 Line 1"
+    max_length: 24
+    restore_value: true
+    initial_value: ""
+    optimistic: true
+    on_value:
+      then:
+        - component.update: display_1
+
+  - platform: template
+    mode: text
+    id: d4_line2
+    name: "D4 Line 2"
+    max_length: 24
+    restore_value: true
+    initial_value: ""
+    optimistic: true
+    on_value:
+      then:
+        - component.update: display_1
+
+  - platform: template
+    mode: text
+    id: d4_line3
+    name: "D4 Line 3"
+    max_length: 24
+    restore_value: true
+    initial_value: ""
+    optimistic: true
+    on_value:
+      then:
+        - component.update: display_1
+
+
+# -----------------------
+# Icon selects + rotation select
+# -----------------------
+select:
+  # D1 icon
+  - platform: template
+    name: "D1 Icon"
+    id: d1_icon
+    optimistic: true
+    restore_value: true
+    initial_option: "Home"
+    options: &all_icons
+      - "Home"
+      - "Light On"
+      - "Light Off"
+      - "Lamp"
+      - "Brightness"
+      - "Thermometer"
+      - "Hot"
+      - "Cold"
+      - "Fan"
+      - "AC"
+      - "Heater"
+      - "Water"
+      - "Rain"
+      - "Sunny"
+      - "Moon"
+      - "Weather"
+      - "Power"
+      - "Battery"
+      - "Battery Low"
+      - "Solar"
+      - "Lock"
+      - "Unlock"
+      - "Security"
+      - "Camera"
+      - "Motion"
+      - "Alarm"
+      - "Shield"
+      - "Door"
+      - "Door Open"
+      - "Window"
+      - "Garage Door"
+      - "Kitchen"
+      - "Bedroom"
+      - "Bathroom"
+      - "Living Room"
+      - "Office"
+      - "Garage"
+      - "Chair"
+      - "Bed"
+      - "TV"
+      - "Computer"
+      - "Tablet"
+      - "Speaker"
+      - "Music"
+      - "Volume"
+      - "Microphone"
+      - "Headphones"
+      - "Radio"
+      - "Washer"
+      - "Dryer"
+      - "Coffee"
+      - "Microwave"
+      - "Fridge"
+      - "Garden"
+      - "Tree"
+      - "BBQ"
+      - "Pool"
+      - "Sprinkler"
+      - "Car"
+      - "Bike"
+      - "Bus"
+      - "Train"
+      - "Airplane"
+      - "WiFi"
+      - "Bluetooth"
+      - "Phone"
+      - "Network"
+      - "Cast"
+      - "Notification"
+      - "Alert"
+      - "Info"
+      - "Error"
+      - "Play"
+      - "Pause"
+      - "Stop"
+      - "Settings"
+      - "More"
+      - "Check"
+      - "Close"
+      - "Add"
+      - "Remove"
+      - "Temperature"
+      - "Smoke"
+      - "CO2"
+      - "Clock"
+      - "Timer"
+      - "Alarm Clock"
+      - "Calendar"
+      - "Schedule"
+      - "Gaming"
+      - "Movie"
+      - "Sports"
+      - "Book"
+      - "Photo"
+      - "Trash"
+      - "Recycle"
+      - "Filter"
+      - "Tools"
+      - "Repair"
+      - "Stock"
+      - "(none)"
+    on_value:
+      then:
+        - component.update: display_1
+
+  # D2 icon
+  - platform: template
+    name: "D2 Icon"
+    id: d2_icon
+    optimistic: true
+    restore_value: true
+    initial_option: "(none)"
+    options: *all_icons
+    on_value:
+      then:
+        - component.update: display_1
+
+  # D3 icon
+  - platform: template
+    name: "D3 Icon"
+    id: d3_icon
+    optimistic: true
+    restore_value: true
+    initial_option: "(none)"
+    options: *all_icons
+    on_value:
+      then:
+        - component.update: display_1
+
+  # D4 icon
+  - platform: template
+    name: "D4 Icon"
+    id: d4_icon
+    optimistic: true
+    restore_value: true
+    initial_option: "(none)"
+    options: *all_icons
+    on_value:
+      then:
+        - component.update: display_1
+
+  # Rotation
+  - platform: template
+    name: "Display Rotation"
+    id: display_rotation
+    optimistic: true
+    restore_value: true
+    initial_option: "180"
+    options:
+      - "0"
+      - "90"
+      - "180"
+      - "270"
+    on_value:
+      then:
+        - lambda: |-
+            const int r = atoi(x.c_str());
+            id(lcd_rotation) = r;
+
+            switch (r) {
+              case 0:
+                id(display_1).set_rotation(esphome::display::DISPLAY_ROTATION_0_DEGREES);
+                break;
+              case 90:
+                id(display_1).set_rotation(esphome::display::DISPLAY_ROTATION_90_DEGREES);
+                break;
+              case 180:
+                id(display_1).set_rotation(esphome::display::DISPLAY_ROTATION_180_DEGREES);
+                break;
+              case 270:
+                id(display_1).set_rotation(esphome::display::DISPLAY_ROTATION_270_DEGREES);
+                break;
+              default:
+                id(display_1).set_rotation(esphome::display::DISPLAY_ROTATION_180_DEGREES);
+                id(lcd_rotation) = 180;
+                break;
+            }
+        - component.update: display_1

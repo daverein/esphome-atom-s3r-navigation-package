@@ -1,8 +1,11 @@
+# packages/atom_s3r/main.yaml
+
 packages:
-  atom_base: !include base.yaml
-  atom_connectivity: !include connectivity.yaml
-  atom_ble_ir: !include ble_ir.yaml
-  atom_backlight: !include backlight_lp5562.yaml
-  atom_display_icons: !include display_icons.yaml
-  atom_ui: !include ui_displays.yaml
-  atom_buttons: !include button_events.yaml
+  atom_s3r_base: !include base.yaml
+  atom_s3r_connectivity: !include connectivity.yaml
+  atom_s3r_ble_ir: !include ble_ir.yaml
+  atom_s3r_backlight: !include backlight_lp5562.yaml
+  atom_s3r_icons: !include display_icons.yaml
+  atom_s3r_ui: !include ui_displays.yaml
+  atom_s3r_buttons: !include button_events.yaml
+  atom_s3r_display: !include display.yaml
