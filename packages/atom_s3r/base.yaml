@@ -65,10 +65,6 @@ esp32:
 
 logger:
 
-api:
-  encryption:
-    key: "8+9zRJ1YBR/2j7hwOFg1e6P/fqYK9UHhPcg6qS9jzR4="
-
 ota:
   - platform: esphome
     password: "de407c93f201933ef95a175a039316be"
