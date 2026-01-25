@@ -3,6 +3,9 @@
 esphome:
   name: ${device_name}
   friendly_name: ${device_friendly_name}
+  project:
+    name: "daverein.atom_s3r_nav"
+    version: "1.0.0"
   on_boot:
     priority: -10
     then:
