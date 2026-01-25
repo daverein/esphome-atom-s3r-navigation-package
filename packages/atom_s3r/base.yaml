@@ -1,8 +1,9 @@
 # packages/atom_s3r/base.yaml
 
 esphome:
-  name: atom-s3r-ble-ir-btn-proxy
-  friendly_name: "Atom S3R BLE + IR Proxy + Button"
+  esphome:
+    name: ${device_name}
+    friendly_name: ${device_friendly_name}
   on_boot:
     priority: -10
     then:
