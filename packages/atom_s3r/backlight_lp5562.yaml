@@ -1,21 +1,33 @@
-# packages/atom_s3r/ble_ir.yaml
+# packages/atom_s3r/backlight_lp5562.yaml
 
-# -----------------------
-# BLE Proxy
-# -----------------------
-esp32_ble_tracker:
-  scan_parameters:
-    interval: 320ms
-    window: 160ms
-    active: true
+# -----------------------------
+# Backlight (LP5562 over I2C)
+# -----------------------------
+external_components:
+  - source:
+      type: git
+      url: https://github.com/ssieb/esphome
+      ref: lp5562
+    components: [ lp5562 ]
+    refresh: 1min
 
-bluetooth_proxy:
-  active: true
+i2c:
+  sda: GPIO45
+  scl: GPIO0
+  scan: true
+  frequency: 400kHz
 
-# -----------------------
-# IR transmitter (Atom S3R IR LED)
-# -----------------------
-remote_transmitter:
-  pin: GPIO4
-  carrier_duty_percent: 50%
-  non_blocking: true
+lp5562:
+
+output:
+  - platform: lp5562
+    id: lcd_backlight_out
+    channel: 3
+
+light:
+  - platform: monochromatic
+    id: lcd_backlight
+    name: "LCD Backlight"
+    output: lcd_backlight_out
+    restore_mode: ALWAYS_ON
+    default_transition_length: 0s
