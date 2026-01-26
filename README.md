@@ -63,17 +63,21 @@ Once the device is adopted in Home Assistant, you’ll get entities like:
 - `Idle Return To Display 1`
 - `Display Rotation`
 
+![Atom S3R Displays](img/enable-display.png)
+
 Displays 2–4 are only included in cycling if enabled.
 Tap-to-cycle is separated from normal press events, so it won’t accidentally trigger your automations.
 
 
-![Atom S3R preview](img/shades-example.png)
+
 
 ### Per-display UI fields
 - `D1 Icon`, `D1 Icon Title`, `D1 Line 1`, `D1 Line 2`, `D1 Line 3`
 - `D2 Icon`, `D2 Icon Title`, `D2 Line 1`, `D2 Line 2`, `D2 Line 3`
 - `D3 Icon`, `D3 Icon Title`, `D3 Line 1`, `D3 Line 2`, `D3 Line 3`
 - `D4 Icon`, `D4 Icon Title`, `D4 Line 1`, `D4 Line 2`, `D4 Line 3`
+
+![Atom S3R Display Config](img/labels.png)
 
 ### Per-display button events (perfect for automations)
 - `Display 1 Button Pressed`
@@ -88,6 +92,10 @@ Tap-to-cycle is separated from normal press events, so it won’t accidentally t
 - `Display 4 Button Pressed`
 - `Display 4 Button Double Clicked`
 - `Display 4 Button Held`
+
+![Atom S3R Sensor List](img/sensor-list.png)
+
+![Atom S3R preview](img/shades-example.png)
 
 ---
 
