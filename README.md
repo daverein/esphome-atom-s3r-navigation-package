@@ -15,6 +15,10 @@ A reusable ESPHome package for the **M5Stack Atom S3R** that provides:
 - Fully customizable per-screen icon + text lines via Home Assistant UI
 - Network status via colored background
 
+
+For more information on the Atom S3R, see here:
+[Atom S3R docs and store](https://docs.m5stack.com/en/core/AtomS3R)
+
 ---
 
 ## Features
