@@ -148,6 +148,19 @@ interval:
           id(picked_up).publish_state(moving);
           id(idle_bs).publish_state(is_idle);
 
+script:
+  - id: backlight_wake
+    mode: restart
+    then:
+      - light.turn_on:
+          id: lcd_backlight
+          brightness: 1.0
+          transition_length: 150ms
+      - delay: 20s
+      - light.turn_off:
+          id: lcd_backlight
+          transition_length: 600ms
+
 binary_sensor:
   - platform: template
     id: picked_up
@@ -156,6 +169,9 @@ binary_sensor:
     filters:
       - delayed_on: 200ms
       - delayed_off: 2s
+
+    on_press:
+      - script.execute: backlight_wake
 
   - platform: template
     id: idle_bs
