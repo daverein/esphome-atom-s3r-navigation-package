@@ -26,5 +26,15 @@ captive_portal:
 text_sensor:
   - platform: wifi_info
     ip_address:
-      name: "Atom IP Address"
+      name: "Atom IP Address" 
       id: wifi_ip
+    ssid:
+      name: "Atom SSID"
+      id: wifi_ssid
+
+sensor:
+  - platform: wifi_signal
+    name: "Atom WiFi Signal"
+    id: wifi_rssi
+    update_interval: 30s
+
