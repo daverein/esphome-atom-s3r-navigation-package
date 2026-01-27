@@ -9,3 +9,4 @@ packages:
   atom_s3r_ui: !include ui_displays.yaml
   atom_s3r_buttons: !include button_events.yaml
   atom_s3r_display: !include display.yaml
+  atom_s3r_geomag: !include geomag_bmi270.yaml

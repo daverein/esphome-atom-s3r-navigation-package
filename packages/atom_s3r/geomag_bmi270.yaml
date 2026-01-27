@@ -1,0 +1,165 @@
+external_components:
+  - source: github://DennisGaida/m5stack-atoms3r-components/components@main
+    components: [bmi270_bmm150]
+
+i2c:
+  - id: imu_bus
+    sda: GPIO45
+    scl: GPIO0
+
+globals:
+  # Cache last good magnitudes so templates never publish NaN
+  - id: accel_mag_last
+    type: float
+    restore_value: no
+    initial_value: "0.0"
+  - id: gyro_mag_last
+    type: float
+    restore_value: no
+    initial_value: "0.0"
+
+  # Baseline for "at rest" accel magnitude (auto-detect g vs m/s^2)
+  - id: amag_baseline
+    type: float
+    restore_value: no
+    initial_value: "0.0"
+  - id: baseline_initialized
+    type: bool
+    restore_value: no
+    initial_value: "false"
+
+sensor:
+  # --- Your known-good IMU sensors (keep names so you can see raw values in HA) ---
+  - platform: bmi270_bmm150
+    i2c_id: imu_bus
+    address: 0x68
+    update_interval: 3s
+
+    acceleration_x:
+      name: "BMI270 Accel X"
+      id: bmi_ax
+      internal: true
+    acceleration_y:
+      name: "BMI270 Accel Y"
+      id: bmi_ay
+      internal: true
+    acceleration_z:
+      name: "BMI270 Accel Z"
+      id: bmi_az
+      internal: true
+
+    gyroscope_x:
+      name: "BMI270 Gyro X"
+      id: bmi_gx
+      internal: true
+    gyroscope_y:
+      name: "BMI270 Gyro Y"
+      id: bmi_gy
+      internal: true
+    gyroscope_z:
+      name: "BMI270 Gyro Z"
+      id: bmi_gz
+      internal: true
+
+    temperature:
+      name: "BMI270 Temperature"
+      id: bmi_temp
+
+  # --- Magnitudes (never publish NaN) ---
+  - platform: template
+    name: "Accel Magnitude"
+    id: accel_mag
+    internal: true
+    update_interval: 200ms
+    lambda: |-
+      // Wait until all 3 axes have a real state
+      if (!id(bmi_ax).has_state() || !id(bmi_ay).has_state() || !id(bmi_az).has_state()) {
+        return id(accel_mag_last);
+      }
+
+      const float ax = id(bmi_ax).state;
+      const float ay = id(bmi_ay).state;
+      const float az = id(bmi_az).state;
+
+      // If the driver ever emits NaN, don't propagate it
+      if (isnan(ax) || isnan(ay) || isnan(az)) {
+        return id(accel_mag_last);
+      }
+
+      const float mag = sqrtf(ax*ax + ay*ay + az*az);
+      if (!isnan(mag)) id(accel_mag_last) = mag;
+      return id(accel_mag_last);
+
+  - platform: template
+    name: "Gyro Magnitude"
+    id: gyro_mag
+    internal: true
+    update_interval: 200ms
+    lambda: |-
+      if (!id(bmi_gx).has_state() || !id(bmi_gy).has_state() || !id(bmi_gz).has_state()) {
+        return id(gyro_mag_last);
+      }
+
+      const float gx = id(bmi_gx).state;
+      const float gy = id(bmi_gy).state;
+      const float gz = id(bmi_gz).state;
+
+      if (isnan(gx) || isnan(gy) || isnan(gz)) {
+        return id(gyro_mag_last);
+      }
+
+      const float mag = sqrtf(gx*gx + gy*gy + gz*gz);
+      if (!isnan(mag)) id(gyro_mag_last) = mag;
+      return id(gyro_mag_last);
+
+interval:
+  - interval: 200ms
+    then:
+      - lambda: |-
+          // Use cached magnitudes (these should never be NaN now)
+          const float amag = id(accel_mag).state;
+          const float gmag = id(gyro_mag).state;
+
+          // Still not initialized (before first good sample)
+          if (amag <= 0.0f || isnan(amag) || isnan(gmag)) return;
+
+          // Initialize baseline once, then slowly track it
+          if (!id(baseline_initialized)) {
+            id(amag_baseline) = amag;
+            id(baseline_initialized) = true;
+          } else {
+            // Slow baseline tracking (helps with orientation changes / drift)
+            const float alpha = 0.02f;   // smaller = slower
+            id(amag_baseline) = (1.0f - alpha) * id(amag_baseline) + alpha * amag;
+          }
+
+          const float accel_delta = fabsf(amag - id(amag_baseline));
+
+          // Auto-detect accel units based on baseline magnitude:
+          // ~1.0 => likely "g", ~9.8 => likely "m/s^2"
+          const bool accel_is_ms2 = (id(amag_baseline) > 3.0f);
+
+          const float accel_thresh = accel_is_ms2 ? 2.0f : 0.20f;  // tune
+          const float gyro_thresh  = 35.0f;                        // tune
+
+          const bool moving = (gmag > gyro_thresh) || (accel_delta > accel_thresh);
+          const bool is_idle = !moving;
+
+          id(picked_up).publish_state(moving);
+          id(idle_bs).publish_state(is_idle);
+
+binary_sensor:
+  - platform: template
+    id: picked_up
+    name: "Picked Up"
+    device_class: moving
+    filters:
+      - delayed_on: 200ms
+      - delayed_off: 2s
+
+  - platform: template
+    id: idle_bs
+    name: "Idle"
+    filters:
+      - delayed_on: 5s
+      - delayed_off: 200ms
