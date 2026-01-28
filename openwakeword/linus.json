@@ -4,7 +4,6 @@
   "author": "Kevin Ahrendt",
   "website": "https://www.poundingpavement101.com/",
   "model": "line_us.tflite",
-  "trained_languages": ["en"],
   "version": 1,
   "micro": {
     "probability_cutoff": 0.5,
