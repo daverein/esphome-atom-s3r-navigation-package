@@ -4,6 +4,7 @@
   "author": "Dave Rein",
   "website": "https://www.poundingpavement101.com/",
   "model": "line_us.tflite",
+  "trained_languages": ["en"],
   "version": 2,
   "micro": {
     "probability_cutoff": 0.97,
