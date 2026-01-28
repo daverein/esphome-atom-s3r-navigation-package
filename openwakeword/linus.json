@@ -1,6 +1,6 @@
 {
   "type": "micro",
-  "wake_word": "linux",
+  "wake_word": "linus",
   "author": "Dave Rein",
   "website": "https://www.poundingpavement101.com/",
   "model": "line_us.tflite",
