@@ -1,16 +1,15 @@
 {
   "type": "micro",
-  "wake_word": "Linus",
-  "author": "Kevin Ahrendt",
-  "website": "https://www.kevinahrendt.com/",
-  "model": "linus.tflite",
-  "trained_languages": ["en"],
+  "wake_word": "linux",
+  "author": "Dave Rein",
+  "website": "https://www.poundingpavement101.com/",
+  "model": "line_us.tflite",
   "version": 2,
   "micro": {
     "probability_cutoff": 0.97,
-    "feature_step_size": 10,
     "sliding_window_size": 5,
+    "feature_step_size": 10,
     "tensor_arena_size": 22860,
-    "minimum_esphome_version": "2024.7.0"
+    "minimum_esphome_version": "2024.7"
   }
 }
