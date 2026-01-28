@@ -3,7 +3,7 @@
   "wake_word": "linus",
   "author": "Dave Rein",
   "website": "https://www.poundingpavement101.com/",
-  "model": "line_us.tflite",
+  "model": "https://raw.githubusercontent.com/daverein/esphome-atom-s3r-navigation-package/refs/heads/main/openwakeword/line_us.tflite",
   "trained_languages": ["en"],
   "version": 2,
   "micro": {
