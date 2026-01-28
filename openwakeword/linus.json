@@ -3,7 +3,7 @@
   "wake_word": "Linus",
   "author": "Kevin Ahrendt",
   "website": "https://www.kevinahrendt.com/",
-  "model": "linus.tflite",
+  "model": "./linus.tflite",
   "trained_languages": ["en"],
   "version": 2,
   "micro": {
