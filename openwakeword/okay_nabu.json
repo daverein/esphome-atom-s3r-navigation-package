@@ -3,6 +3,7 @@
   "wake_word": "Okay Nabu",
   "author": "Kevin Ahrendt",
   "website": "https://www.kevinahrendt.com/",
+  "model": "
   "model": "https://raw.githubusercontent.com/daverein/esphome-atom-s3r-navigation-package/refs/heads/main/openwakeword/okay_nabu.tflite",
   "trained_languages": ["en"],
   "version": 2,
